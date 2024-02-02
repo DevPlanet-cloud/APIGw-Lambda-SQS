@@ -13,11 +13,11 @@ namespace APIGw_Lambda_SQS;
 public class Function
 {
 
-    public async Task<APIGatewayHttpApiV2ProxyResponse> FunctionHandler(APIGatewayHttpApiV2ProxyRequest apigProxyEvent, ILambdaContext context)
+    public async Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest apigProxyEvent, ILambdaContext context)
     {
         string messageID = string.Empty;
 
-        if (apigProxyEvent.RequestContext.Http.Method != "POST" || string.IsNullOrEmpty(apigProxyEvent.Body))
+        if (apigProxyEvent.HttpMethod != "POST" || string.IsNullOrEmpty(apigProxyEvent.Body))
         {
             string errorText = "{ \"Error\" : \"Invalid HttpMethod or empty request body!\" }";
             Console.WriteLine(errorText);
@@ -64,9 +64,9 @@ public class Function
         return sendMessageResponse.MessageId;
     }
 
-    private APIGatewayHttpApiV2ProxyResponse GenerateAndReturnResponse(int statusCode, string jsonMessage)
+    private APIGatewayProxyResponse GenerateAndReturnResponse(int statusCode, string jsonMessage)
     {
-        return new APIGatewayHttpApiV2ProxyResponse
+        return new APIGatewayProxyResponse
         {
             Body = jsonMessage,
             StatusCode = statusCode,
